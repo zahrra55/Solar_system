@@ -218,30 +218,6 @@ namespace Solar_system
             bmp.UnlockBits(bmpdata);
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
-            //GL.BindTexture(TextureTarget.Texture2D, textures[7]);
-            //bmp = new Bitmap("2k_neptune.jpg");
-            //rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            //bmpdata = bmp.LockBits(rect, ImageLockMode.ReadOnly,
-            //System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            //GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb,
-            //bmpdata.Width, bmpdata.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgr,
-            //PixelType.UnsignedByte, bmpdata.Scan0);
-            //bmp.UnlockBits(bmpdata);
-            //GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-
-            //GL.BindTexture(TextureTarget.Texture2D, textures[8]);
-            //bmp = new Bitmap("sample_sd.bmp");
-            //rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            //bmpdata = bmp.LockBits(rect, ImageLockMode.ReadOnly,
-            //System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            //GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb,
-            //bmpdata.Width, bmpdata.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgr,
-            //PixelType.UnsignedByte, bmpdata.Scan0);
-            //bmp.UnlockBits(bmpdata);
-            //GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-
-            //2k_neptune.jpg
-
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
