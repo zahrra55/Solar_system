@@ -29,11 +29,14 @@ This project demonstrates how to use **OpenTK (Open Toolkit)**, a C# wrapper for
 - **.NET Framework** (if not already installed)
 - **OpenTK NuGet Package**
   - Open the project in Visual Studio and run the following command in the NuGet Package Manager Console:
+
     ```bash
     Install-Package OpenTK
     ```
+---
 
-🖥 Usage
+## 🖥 Usage
+
 Run the Program: Launch the application to see the planets orbiting the sun.
 Experiment with Code:
   Modify the Program.cs file to adjust parameters like:
@@ -41,20 +44,28 @@ Experiment with Code:
   - Orbital speeds.
   - Distances from the sun.
   Add new planets or customize their colors.
-Notes:
+
+### Notes:
   - Ensure that the OpenTK package is installed properly; otherwise, the rendering may not work.
   - If you encounter errors related to dependencies, try cleaning the project (Build > Clean Solution) and rebuilding it.
 
-🛠 Technologies Used
+---
+
+## 🛠 Technologies Used
+
 - Programming Language: C#
 - Graphics Library: OpenTK (Open Toolkit)
 - Development Environment: Visual Studio
 
-📄 License:
+---
+## 📄 License:
 
-This project is licensed under the MIT License. Feel free to use, modify, and distribute this project as per the license terms.
+- This project is licensed under the [MIT License](https://choosealicense.com/licenses/mit/). 
+- Feel free to use, modify, and distribute this project as per the license terms.
 
-Acknowledgements
+---
+
+## Acknowledgements
+
 - University of Baghdad: For the academic inspiration and support.
 - OpenTK Developers: For providing a powerful and easy-to-use toolkit for graphics development.
-- Visual Studio Team: For creating an excellent development environment.
