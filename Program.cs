@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +13,7 @@ namespace Solar_system
 {
     internal class Program
     {
-
+        // Game window and transformation variables
         static GameWindow window;
         static double th0 = 0.0;
         static double th1 = 0.0;
@@ -24,19 +24,23 @@ namespace Solar_system
         static bool stop = false;
         static bool angle = false;
         static bool speedUp = false;
-        static int[] textures = new int[10];
+        static int[] textures = new int[10]; // Array to hold texture IDs
+
+        // Main entry point for the application
         static void Main(string[] args)
         {
             window = new GameWindow(1000, 1000);
-            window.Load += loaded;
-            window.Resize += resizeF;
-            window.RenderFrame += renderFrame;
-            window.KeyPress += KeyPress;
-            window.KeyDown += KeyDown;
-            window.KeyUp += KeyUp;
-            
-            window.Run(200);
+            window.Load += loaded;  // Event handler for window load
+            window.Resize += resizeF;  // Event handler for window resize
+            window.RenderFrame += renderFrame;  // Event handler for rendering frames
+            window.KeyPress += KeyPress;  // Event handler for key presses
+            window.KeyDown += KeyDown;  // Event handler for key down events
+            window.KeyUp += KeyUp;  // Event handler for key up events
+
+            window.Run(200);  // Run the OpenGL application
         }
+
+        // Resize event handler to adjust projection matrix when window is resized
         static void resizeF(object o, EventArgs e)
         {
             GL.MatrixMode(MatrixMode.Projection);
@@ -47,17 +51,19 @@ namespace Solar_system
             window.SwapBuffers();
         }
 
+        // Render the solar system in each frame
         static void renderFrame(object o, EventArgs e)
         {
             GL.LoadIdentity();
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            if (angle == true)
+
+            if (angle == true) // Adjust view angle
             {
                 GL.Translate(5.0, -10.0, 0.0);
-                GL.Rotate(10.0, 1.0, 0.0, 1.0); //for a better point of view.
+                GL.Rotate(10.0, 1.0, 0.0, 1.0); // Apply rotation for better view
             }
 
-
+            // Drawing the Sun and planets
             GL.PushMatrix();
             GL.Translate(0.0, -5.0, -65.0);
             GL.Rotate(th0, 7.0, 1.0, 5.0);
@@ -94,11 +100,13 @@ namespace Solar_system
             jupiter(35);
             GL.PopMatrix();
 
+            // Background rendering
             GL.PushMatrix();
             GL.Translate(0.0, 7.0, -60);
-            background();
+            Background();
             GL.PopMatrix();
 
+            // Adjust rotation speeds if speedUp is active
             if (speedUp == true)
             {
                 th0 *= 2;
@@ -108,121 +116,75 @@ namespace Solar_system
                 th4 *= 2;
             }
 
-            if (stop == false)
-                th0 += 1.5;
-            if (th0 > 360) th0 -= 360;
+            UpdateAngles(); // Update angles of rotation for planets
 
-            if (stop == false)
-                th1 += 1.2;
-            if (th1 > 360)  th1 -= 360;
+            window.SwapBuffers(); // Swap buffers to display the current frame
 
-            if (stop == false)
-                th2 += 0.9;
-            if (th2 > 360) th2 -= 360;
-
-            if (stop == false)
-                th3 += 0.6;
-            if (th3 > 360) th3 -= 360;
-
-            if (stop == false)
-                th4 += 0.4;
-            if (th4 > 360) th4 -= 360;
-
-            window.SwapBuffers();
             // System.Threading.Thread.Sleep(5);
+           
         }
+
+        // Load textures for the planets and background
         static void loaded(object o, EventArgs e)
         {
             
-            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.DepthTest); // Enable depth testing for 3D rendering
 
-            GL.Enable(EnableCap.Texture2D);
-            GL.GenTextures(6, textures);
+            GL.Enable(EnableCap.Texture2D); // Enable 2D texturing
+            GL.GenTextures(6, textures); // Generate texture IDs for planets and background
 
-            //Define the first texture
-            GL.BindTexture(TextureTarget.Texture2D, textures[0]);
-            Bitmap bmp = new Bitmap("galaxy.jpg");
+            // Load textures for each planet and background
+            LoadTexture("galaxy.jpg", 0);  // Background texture
+            LoadTexture("8k_sun.jpg", 1);  // Sun texture
+            LoadTexture("earth2k.jpg", 2);  // Earth texture
+            LoadTexture("2k_mars.jpg", 3);  // Mars texture
+            LoadTexture("2k_mercury.jpg", 4);  // Mercury texture
+            LoadTexture("venus.jpg", 5);  // Venus texture
+            LoadTexture("2k_jupiter.jpg", 6);  // jupiter texture
+
+            GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);  // Set background color
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);  // Set blending mode
+        }
+
+        // Helper function to load a texture from a file and bind it
+        static void LoadTexture(string filePath, int textureIndex)
+        {
+            Bitmap bmp = new Bitmap(filePath);
             Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            BitmapData bmpdata = bmp.LockBits(rect, ImageLockMode.ReadOnly,
-            System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb,
-            bmpdata.Width, bmpdata.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgr,
-            PixelType.UnsignedByte, bmpdata.Scan0);
-            bmp.UnlockBits(bmpdata);
-            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-
-            // Define the second texture
-            GL.BindTexture(TextureTarget.Texture2D, textures[1]);
-            bmp = new Bitmap("8k_sun.jpg");
-            rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            bmpdata = bmp.LockBits(rect, ImageLockMode.ReadOnly,
-            System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb,
-            bmpdata.Width, bmpdata.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgr,
-            PixelType.UnsignedByte, bmpdata.Scan0);
-            bmp.UnlockBits(bmpdata);
-            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-
-            GL.BindTexture(TextureTarget.Texture2D, textures[2]);
-            bmp = new Bitmap("earth2k.jpg");
-            rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            bmpdata = bmp.LockBits(rect, ImageLockMode.ReadOnly,
-            System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb,
-            bmpdata.Width, bmpdata.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgr,
-            PixelType.UnsignedByte, bmpdata.Scan0);
-            bmp.UnlockBits(bmpdata);
-            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-
-            GL.BindTexture(TextureTarget.Texture2D, textures[3]);
-            bmp = new Bitmap("2k_mars.jpg");
-            rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            bmpdata = bmp.LockBits(rect, ImageLockMode.ReadOnly,
-            System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb,
-            bmpdata.Width, bmpdata.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgr,
-            PixelType.UnsignedByte, bmpdata.Scan0);
-            bmp.UnlockBits(bmpdata);
-            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-
-            GL.BindTexture(TextureTarget.Texture2D, textures[4]);
-            bmp = new Bitmap("2k_mercury.jpg");
-            rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            bmpdata = bmp.LockBits(rect, ImageLockMode.ReadOnly,
-            System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb,
-            bmpdata.Width, bmpdata.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgr,
-            PixelType.UnsignedByte, bmpdata.Scan0);
-            bmp.UnlockBits(bmpdata);
-            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-
-            GL.BindTexture(TextureTarget.Texture2D, textures[5]);
-            bmp = new Bitmap("venus.jpg");
-            rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            bmpdata = bmp.LockBits(rect, ImageLockMode.ReadOnly,
-            System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb,
-            bmpdata.Width, bmpdata.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgr,
-            PixelType.UnsignedByte, bmpdata.Scan0);
-            bmp.UnlockBits(bmpdata);
-            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-
-            GL.BindTexture(TextureTarget.Texture2D, textures[6]);
-            bmp = new Bitmap("2k_jupiter.jpg");
-            rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            bmpdata = bmp.LockBits(rect, ImageLockMode.ReadOnly,
-            System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb,
-            bmpdata.Width, bmpdata.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgr,
-            PixelType.UnsignedByte, bmpdata.Scan0);
+            BitmapData bmpdata = bmp.LockBits(rect, ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            GL.BindTexture(TextureTarget.Texture2D, textures[textureIndex]);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, bmpdata.Width, bmpdata.Height, 0,
+                OpenTK.Graphics.OpenGL.PixelFormat.Bgr, PixelType.UnsignedByte, bmpdata.Scan0);
             bmp.UnlockBits(bmpdata);
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-
+            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);  // Generate mipmaps for better texture filtering
         }
+
+        // Update angles of rotation for all planets
+        static void UpdateAngles()
+        {
+            if (!stop)
+            {
+                th0 += 1.5;
+                th1 += 1.2;
+                th2 += 0.9;
+                th3 += 0.6;
+                th4 += 0.4;
+            }
+
+            // Keep the angles within 0-360 degrees
+            th0 %= 360;
+            th1 %= 360;
+            th2 %= 360;
+            th3 %= 360;
+            th4 %= 360;
+        }
+
+        // Key press event to toggle planet visibility
         static void KeyPress(object o, KeyPressEventArgs e)
         {
             if (e.KeyChar == 'q')
@@ -230,17 +192,21 @@ namespace Solar_system
                 show = !show;
             }
         }
+
+        // Key down event to control animation behaviors
         static void KeyDown(object o,KeyboardKeyEventArgs e)
         {
             if(e.Key == Key.Space)
             {
-                stop = !stop;
+                stop = !stop; // Toggle animation stop
             }
             if (e.Key == Key.Tab)
             {
-                angle = !angle;
+                angle = !angle; // Toggle camera angle
             }
         }
+
+        // Key up event to control speed-up functionality
         static void KeyUp(object o, KeyboardKeyEventArgs e)
         {
             if (e.Key == Key.ShiftLeft)
@@ -248,6 +214,8 @@ namespace Solar_system
                 speedUp = !speedUp;
             }
         }
+
+        // Function to draw a sphere with given parameters (radius, latitude, longitude, texture ID)
         static void drawSphere(double r, int latitude, int longitude,int t)
         {
             //latitude is the number of stacks(num of horizontal lines)
@@ -279,6 +247,7 @@ namespace Solar_system
                 GL.End();
             }
         }
+
         static void Marcury(int r)
         {
             int xc = 0, zc = 0;
@@ -395,7 +364,7 @@ namespace Solar_system
             GL.End();
             }
         }
-        static void background()
+        static void Background()
         {
             GL.BindTexture(TextureTarget.Texture2D, textures[0]);
             GL.Begin(PrimitiveType.Quads);
