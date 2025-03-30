@@ -1,10 +1,10 @@
-# Solar System 🌌
+# Solar System
 
 A computer graphics project developed as part of the University of Baghdad's computer science course, showcasing a simplified model of our solar system using **OpenTK**.
 
 ---
 
-## 🌟 Features
+## Features
 
 - **Interactive Animation:** Watch planets orbiting the sun in a realistic manner.
 - **Customizable Experience:** Adjust parameters like planet sizes, speeds, or orbit distances.
@@ -12,7 +12,7 @@ A computer graphics project developed as part of the University of Baghdad's com
 
 ---
 
-## 📖 Project Overview
+## Project Overview
 
 This project demonstrates how to use **OpenTK (Open Toolkit)**, a C# wrapper for OpenGL, to create animations and visualizations. The solar system includes:
 
@@ -22,7 +22,7 @@ This project demonstrates how to use **OpenTK (Open Toolkit)**, a C# wrapper for
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 - **Visual Studio** (latest version recommended)
@@ -35,7 +35,7 @@ This project demonstrates how to use **OpenTK (Open Toolkit)**, a C# wrapper for
     ```
 ---
 
-## 🖥 Usage
+## Usage
 
 Run the Program: Launch the application to see the planets orbiting the sun.
 Experiment with Code:
@@ -51,14 +51,14 @@ Experiment with Code:
 
 ---
 
-## 🛠 Technologies Used
+## Technologies Used
 
 - Programming Language: C#
 - Graphics Library: OpenTK (Open Toolkit)
 - Development Environment: Visual Studio
 
 ---
-## 📄 License:
+## License:
 
 - This project is licensed under the [MIT License](https://choosealicense.com/licenses/mit/). 
 - Feel free to use, modify, and distribute this project as per the license terms.
